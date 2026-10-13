@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Word up</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#2a1250" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Halloween" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="images/icon.png" />
+    <link rel="icon" type="image/png" href="images/icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg1: #2a1250;
+        --bg2: #4a1c78;
+        --bg3: #7a2f8f;
+        --orange: #ff9a1f;
+        --yellow: #ffe066;
+        --white: #fff8ee;
+        --green: #58d46a;
+        --red: #ff4d4d;
+        --font:
+          "Fredoka", "Chalkboard SE", "Hiragino Maru Gothic ProN",
+          "Comic Sans MS", system-ui, sans-serif;
+        --top: calc(env(safe-area-inset-top, 0px) + 70px);
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg1);
+        font-family: var(--font);
+        color: var(--white);
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+      }
+      body {
+        background: radial-gradient(
+          circle at 50% 0%,
+          var(--bg3) 0%,
+          var(--bg2) 40%,
+          var(--bg1) 100%
+        );
+      }
+
+      /* ---------- decorations ---------- */
+      .star {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #fff;
+        opacity: 0.7;
+        animation: twinkle 3s infinite ease-in-out;
+        z-index: 0;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.2;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.3);
+        }
+      }
+
+      /* ---------- top buttons ---------- */
+      .round {
+        position: fixed;
+        z-index: 30;
+        top: calc(env(safe-area-inset-top, 0px) + 10px);
+        width: clamp(46px, 8vmin, 60px);
+        height: clamp(46px, 8vmin, 60px);
+        border-radius: 50%;
+        border: 3px solid #fff;
+        background: var(--orange);
+        font-size: clamp(22px, 4.2vmin, 32px);
+        cursor: pointer;
+        color: #fff;
+        font-family: var(--font);
+        font-weight: 700;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .round:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+      }
+      #back {
+        left: calc(env(safe-area-inset-left, 0px) + 12px);
+      }
+      #mute {
+        right: calc(env(safe-area-inset-right, 0px) + 12px);
+      }
+      #mute.off {
+        background: #6b5a85;
+      }
+
+      /* ---------- screens ---------- */
+      .screen {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: var(--top) calc(env(safe-area-inset-right, 0px) + 14px)
+          calc(env(safe-area-inset-bottom, 0px) + 12px)
+          calc(env(safe-area-inset-left, 0px) + 14px);
+        gap: 3vmin;
+        text-align: center;
+      }
+      .screen.active {
+        display: flex;
+      }
+      h1 {
+        font-size: clamp(30px, 8vmin, 64px);
+        line-height: 1.05;
+        color: var(--orange);
+        font-weight: 700;
+        text-shadow:
+          0 3px 0 #7a2f00,
+          0 0 24px rgba(255, 154, 31, 0.5);
+      }
+      .sub {
+        font-size: clamp(16px, 3.6vmin, 28px);
+        color: var(--yellow);
+        font-weight: 500;
+      }
+
+      .choices {
+        display: flex;
+        gap: clamp(12px, 3vmin, 28px);
+        flex-wrap: wrap;
+        justify-content: center;
+        width: min(94vw, 900px);
+      }
+      .big {
+        font-family: var(--font);
+        color: #fff;
+        cursor: pointer;
+        border: 4px solid rgba(255, 255, 255, 0.9);
+        border-radius: clamp(20px, 4vmin, 34px);
+        padding: clamp(12px, 2.6vmin, 26px) clamp(18px, 4vmin, 40px);
+        min-width: clamp(150px, 30vmin, 260px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6vmin;
+        box-shadow:
+          0 8px 0 rgba(0, 0, 0, 0.35),
+          0 14px 26px rgba(0, 0, 0, 0.3);
+        transition:
+          transform 0.12s,
+          box-shadow 0.12s;
+      }
+      .big:active {
+        transform: translateY(6px);
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+      }
+      .big b {
+        font-size: clamp(24px, 5.4vmin, 46px);
+        font-weight: 700;
+        text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+      }
+      .big small {
+        font-size: clamp(13px, 2.6vmin, 21px);
+        font-weight: 500;
+        opacity: 0.95;
+      }
+      .big .pics {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .big .pics img {
+        height: clamp(34px, 8vmin, 64px);
+        width: auto;
+        filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.35));
+      }
+      .easy {
+        background: linear-gradient(160deg, #6fdc6f, #2a9d43);
+      }
+      .hard {
+        background: linear-gradient(160deg, #a66bff, #6a35c9);
+      }
+      .orange {
+        background: linear-gradient(160deg, #ffb23f, #f0720a);
+      }
+
+      /* ---------- game ---------- */
+      #game {
+        justify-content: flex-start;
+        gap: 1.2vmin;
+        padding-top: calc(var(--top) - 8px);
+      }
+      #hud {
+        display: flex;
+        gap: clamp(8px, 2.4vmin, 26px);
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        font-size: clamp(15px, 3.2vmin, 26px);
+        font-weight: 700;
+        color: var(--yellow);
+      }
+      #hud span {
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 30px;
+        padding: 3px 16px;
+        white-space: nowrap;
+      }
+      #play {
+        flex: 1;
+        min-height: 0;
+        width: min(96vw, 1000px);
+        display: flex;
+        flex-direction: column;
+        gap: 1.6vmin;
+      }
+
+      #prompt {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex: none;
+      }
+      #say {
+        width: clamp(52px, 10vmin, 76px);
+        height: clamp(52px, 10vmin, 76px);
+        border-radius: 50%;
+        border: 4px solid #fff;
+        cursor: pointer;
+        background: linear-gradient(160deg, #6fdc6f, #2a9d43);
+        font-size: clamp(24px, 5vmin, 38px);
+        box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #say:active {
+        transform: translateY(4px);
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+      }
+      #say.talk {
+        animation: pulse 0.6s ease-in-out 2;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.15);
+        }
+      }
+      #wordText {
+        font-size: clamp(30px, 8vmin, 64px);
+        font-weight: 700;
+        background: #fffaf0;
+        color: #3a1a60;
+        border-radius: 24px;
+        padding: 0.05em 0.6em;
+        border: 4px solid #fff;
+        box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+        line-height: 1.2;
+      }
+
+      #opts {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        gap: clamp(10px, 2.4vmin, 22px);
+        grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+        grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
+      }
+      #opts.easy {
+        --cols: 2;
+        --rows: 1;
+      }
+      #opts.hard {
+        --cols: 2;
+        --rows: 2;
+      }
+      @media (orientation: landscape) {
+        #opts.hard {
+          --cols: 4;
+          --rows: 1;
+        }
+      }
+      .opt {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background: #fffaf0;
+        border: 5px solid #fff;
+        border-radius: clamp(18px, 4vmin, 34px);
+        padding: 6px;
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+        font-family: var(--font);
+        color: #3a1a60;
+        font-weight: 700;
+        font-size: clamp(16px, 3.4vmin, 28px);
+        transition: transform 0.12s;
+        animation: pop 0.35s backwards;
+      }
+      .opt:active {
+        transform: translateY(4px);
+      }
+      .opt img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .opt.right {
+        background: #e8ffe8;
+        border-color: var(--green);
+        box-shadow: 0 0 18px 6px rgba(88, 212, 106, 0.85);
+        animation: bounce 0.5s;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.07);
+        }
+      }
+      .opt.wrong {
+        background: #ffe3e3;
+        border-color: var(--red);
+        opacity: 0.55;
+        animation: shake 0.4s;
+        cursor: default;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      @media (orientation: landscape) and (max-height: 500px) {
+        .screen {
+          gap: 1.6vh;
+        }
+        h1 {
+          font-size: clamp(24px, 10vh, 50px);
+        }
+        .sub {
+          font-size: clamp(13px, 5vh, 22px);
+        }
+        #wordText {
+          font-size: clamp(24px, 9vh, 44px);
+        }
+      }
+
+      /* ---------- results ---------- */
+      #result {
+        justify-content: flex-start;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 2vmin;
+        padding-bottom: 30px;
+      }
+      #result h1 {
+        margin-top: auto;
+      }
+      .stars {
+        font-size: clamp(34px, 8vmin, 64px);
+        letter-spacing: 6px;
+      }
+      .stat {
+        background: rgba(0, 0, 0, 0.28);
+        border-radius: 24px;
+        padding: clamp(8px, 1.6vmin, 16px) clamp(24px, 5vmin, 48px);
+      }
+      .stat small {
+        display: block;
+        font-size: clamp(13px, 2.6vmin, 20px);
+        color: var(--yellow);
+        font-weight: 500;
+      }
+      .stat b {
+        font-size: clamp(28px, 7vmin, 56px);
+        font-weight: 700;
+      }
+      #missTitle {
+        font-size: clamp(18px, 4vmin, 30px);
+        color: var(--yellow);
+        font-weight: 700;
+      }
+      #missList {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(clamp(110px, 22vmin, 170px), 1fr)
+        );
+        gap: 12px;
+        width: min(96vw, 900px);
+      }
+      .missCard {
+        background: #fffaf0;
+        border-radius: 20px;
+        border: 3px solid var(--orange);
+        padding: 8px 6px 10px;
+        color: #3a1a60;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+      }
+      .missCard img {
+        width: 70%;
+        height: clamp(54px, 12vmin, 100px);
+        object-fit: contain;
+      }
+      .missCard .w {
+        font-size: clamp(16px, 3.2vmin, 24px);
+        font-weight: 700;
+      }
+      #perfect {
+        font-size: clamp(20px, 4.6vmin, 34px);
+        color: var(--green);
+        font-weight: 700;
+      }
+      #result .choices {
+        margin-top: 1vmin;
+        margin-bottom: auto;
+      }
+      #result .choices .big {
+        min-width: clamp(130px, 24vmin, 210px);
+        padding: clamp(10px, 2vmin, 18px) clamp(14px, 3vmin, 30px);
+      }
+      .fall {
+        position: absolute;
+        top: -60px;
+        font-size: clamp(24px, 5vmin, 44px);
+        animation: fall linear forwards;
+        pointer-events: none;
+        z-index: 5;
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(115vh) rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sky"></div>
+
+    <button id="back" class="round" aria-label="Back">&#8592;</button>
+    <button
+      id="mute"
+      class="round"
+      aria-label="Mute music"
+      title="Music on/off"
+    >
+      🔊
+    </button>
+
+    <!-- screen 1: mode -->
+    <section id="modeScreen" class="screen active">
+      <h1>Word up!</h1>
+      <div class="sub">Listen, then pick the right picture</div>
+      <div class="choices">
+        <button class="big easy" id="btnEasy">
+          <div class="pics">
+            <img src="images/ghost.png" alt="" /><img
+              src="images/pumpkin.png"
+              alt=""
+            />
+          </div>
+          <b>Easy</b><small>2 pictures</small>
+        </button>
+        <button class="big hard" id="btnHard">
+          <div class="pics">
+            <img src="images/bat.png" alt="" /><img
+              src="images/owl.png"
+              alt=""
+            /><img src="images/moon.png" alt="" /><img
+              src="images/witch.png"
+              alt=""
+            />
+          </div>
+          <b>Difficult</b><small>4 pictures</small>
+        </button>
+      </div>
+    </section>
+
+    <!-- screen 2: game -->
+    <section id="game" class="screen">
+      <div id="hud">
+        <span id="hudWord">Word 1/18</span><span id="hudScore">⭐ 0</span>
+      </div>
+      <div id="play">
+        <div id="prompt">
+          <button id="say" aria-label="Say the word again">🗣️</button>
+          <div id="wordText">word</div>
+        </div>
+        <div id="opts" class="easy"></div>
+      </div>
+    </section>
+
+    <!-- screen 3: results -->
+    <section id="result" class="screen">
+      <h1 id="resTitle">Great job!</h1>
+      <div class="stars" id="resStars"></div>
+      <div class="stat"><small>Score</small><b id="resScore">0/18</b></div>
+      <div id="missTitle"></div>
+      <div id="perfect" style="display: none">
+        Every word right first time! 🎃
+      </div>
+      <div id="missList"></div>
+      <div class="choices">
+        <button class="big orange" id="btnAgain"><b>Play again</b></button>
+        <button class="big hard" id="btnModes"><b>Modes</b></button>
+      </div>
+    </section>
+
+    <script>
+      /* ===== settings ===== */
+      var MUSIC_VOLUME = 0.1; // background music level (0 to 1)
+      var SFX_VOLUME = 0.25; // jingle level
+      var TEMPO_BPM = 120;
+      var VOICE_RATE = 0.8; // speaking speed (lower = slower)
+      var NEXT_DELAY = 1300; // pause after a correct answer (ms)
+      var IMG_FOLDER = "images/";
+
+      /* word shown and spoken, image file inside the images folder */
+      var ITEMS = [
+        ["witch", "witch.png"],
+        ["ghost", "ghost.png"],
+        ["pumpkin", "pumpkin.png"],
+        ["skeleton", "skeleton.png"],
+        ["vampire", "vampire.png"],
+        ["black cat", "black-cat.png"],
+        ["werewolf", "werewolf.png"],
+        ["spider", "spider.png"],
+        ["zombie", "zombie.png"],
+        ["bat", "bat.png"],
+        ["haunted house", "haunted-house.png"],
+        ["monster", "monster.png"],
+        ["mummy", "mummy.png"],
+        ["spider web", "spider-web.png"],
+        ["scary", "scary.png"],
+        ["crow", "crow.png"],
+        ["owl", "owl.png"],
+        ["moon", "moon.png"],
+      ];
+
+      /* ===== stars ===== */
+      (function () {
+        var sky = document.getElementById("sky");
+        for (var i = 0; i < 26; i++) {
+          var s = document.createElement("div");
+          s.className = "star";
+          s.style.left = Math.random() * 100 + "vw";
+          s.style.top = Math.random() * 90 + "vh";
+          s.style.animationDelay = -Math.random() * 3 + "s";
+          sky.appendChild(s);
+        }
+      })();
+
+      /* ===== mute state (shared with the other pages) ===== */
+      var muted = false;
+      try {
+        muted = localStorage.getItem("halloweenMuted") === "1";
+      } catch (e) {}
+      var muteBtn = document.getElementById("mute");
+      function showMute() {
+        muteBtn.textContent = muted ? "🔇" : "🔊";
+        muteBtn.classList.toggle("off", muted);
+        muteBtn.setAttribute(
+          "aria-label",
+          muted ? "Unmute music" : "Mute music",
+        );
+      }
+      showMute();
+
+      /* ===== music: a bouncy "ghost polka" in G minor ===== */
+      var ctx = null,
+        master = null,
+        sfxGain = null,
+        timer = null,
+        started = false;
+      var events = [],
+        evIndex = 0,
+        loopStart = 0,
+        beat = 60 / TEMPO_BPM,
+        LOOP_BEATS = 32;
+      function hz(m) {
+        return 440 * Math.pow(2, (m - 69) / 12);
+      }
+
+      (function buildSong() {
+        // Gm Gm Cm D | Gm Eb D Gm, "oom-pah" bass and chords
+        var roots = [55, 55, 48, 50, 55, 51, 50, 55];
+        var fifths = [50, 50, 55, 57, 50, 58, 57, 50];
+        var chords = [
+          [62, 67, 70],
+          [62, 67, 70],
+          [63, 67, 72],
+          [62, 66, 69],
+          [62, 67, 70],
+          [63, 67, 70],
+          [62, 66, 69],
+          [62, 67, 70],
+        ];
+        for (var b = 0; b < 8; b++) {
+          var t = b * 4;
+          events.push({ t: t, m: [roots[b]], d: 0.7, v: 0.6, w: "sine" });
+          events.push({ t: t + 2, m: [fifths[b]], d: 0.7, v: 0.5, w: "sine" });
+          events.push({
+            t: t + 1,
+            m: chords[b],
+            d: 0.3,
+            v: 0.14,
+            w: "triangle",
+          });
+          events.push({
+            t: t + 3,
+            m: chords[b],
+            d: 0.3,
+            v: 0.14,
+            w: "triangle",
+          });
+        }
+        var mel = [
+          [0, 79, 0.5],
+          [0.5, 82, 0.5],
+          [1, 86, 1],
+          [2, 82, 0.5],
+          [2.5, 79, 0.5],
+          [3, 78, 1],
+          [4, 79, 0.5],
+          [4.5, 82, 0.5],
+          [5, 86, 1],
+          [6, 87, 1],
+          [7, 86, 1],
+          [8, 84, 0.5],
+          [8.5, 82, 0.5],
+          [9, 79, 1],
+          [10, 75, 1],
+          [11, 79, 1],
+          [12, 78, 0.5],
+          [12.5, 81, 0.5],
+          [13, 86, 1],
+          [14, 81, 1],
+          [15, 78, 1],
+          [16, 79, 0.5],
+          [16.5, 82, 0.5],
+          [17, 86, 1],
+          [18, 90, 0.5],
+          [18.5, 86, 0.5],
+          [19, 82, 1],
+          [20, 87, 0.5],
+          [20.5, 86, 0.5],
+          [21, 82, 1],
+          [22, 79, 1],
+          [23, 82, 1],
+          [24, 81, 0.5],
+          [24.5, 78, 0.5],
+          [25, 74, 1],
+          [26, 78, 1],
+          [27, 81, 1],
+          [28, 79, 2],
+          [30, 74, 1],
+        ];
+        mel.forEach(function (n) {
+          events.push({
+            t: n[0],
+            m: [n[1]],
+            d: n[2] * 0.9,
+            v: 0.4,
+            w: "triangle",
+            pluck: true,
+          });
+        });
+        events.sort(function (a, b) {
+          return a.t - b.t;
+        });
+      })();
+
+      function playNote(freq, when, durBeats, vol, wave, pluck) {
+        var dur = durBeats * beat;
+        var o = ctx.createOscillator(),
+          g = ctx.createGain();
+        o.type = wave;
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0.0001, when);
+        g.gain.linearRampToValueAtTime(vol, when + 0.012);
+        g.gain.exponentialRampToValueAtTime(
+          0.0001,
+          when + dur + (pluck ? 0.18 : 0.25),
+        );
+        o.connect(g);
+        g.connect(master);
+        o.start(when);
+        o.stop(when + dur + 0.4);
+      }
+      function schedule() {
+        if (!ctx) return;
+        while (true) {
+          var e = events[evIndex];
+          var when = loopStart + e.t * beat;
+          if (when > ctx.currentTime + 0.5) break;
+          if (when >= ctx.currentTime - 0.05) {
+            for (var i = 0; i < e.m.length; i++)
+              playNote(hz(e.m[i]), when, e.d, e.v, e.w, e.pluck);
+          }
+          evIndex++;
+          if (evIndex >= events.length) {
+            evIndex = 0;
+            loopStart += LOOP_BEATS * beat;
+          }
+        }
+      }
+      function startMusic() {
+        if (started) {
+          if (ctx && ctx.state === "suspended") ctx.resume();
+          return;
+        }
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        ctx = new AC();
+        master = ctx.createGain();
+        master.gain.value = muted ? 0 : MUSIC_VOLUME;
+        master.connect(ctx.destination);
+        sfxGain = ctx.createGain();
+        sfxGain.gain.value = muted ? 0 : SFX_VOLUME;
+        sfxGain.connect(ctx.destination);
+        loopStart = ctx.currentTime + 0.2;
+        evIndex = 0;
+        timer = setInterval(schedule, 100);
+        started = true;
+        if (ctx.state === "suspended") ctx.resume();
+      }
+      /* music starts on the first tap (browsers need a tap) */
+      function firstTap() {
+        document.removeEventListener("click", firstTap, true);
+        document.removeEventListener("touchend", firstTap, true);
+        if (!muted) startMusic();
+      }
+      document.addEventListener("click", firstTap, true);
+      document.addEventListener("touchend", firstTap, true);
+
+      muteBtn.addEventListener("click", function () {
+        muted = !muted;
+        try {
+          localStorage.setItem("halloweenMuted", muted ? "1" : "0");
+        } catch (e) {}
+        showMute();
+        if (!muted && !started) startMusic();
+        if (ctx) {
+          master.gain.setTargetAtTime(
+            muted ? 0 : MUSIC_VOLUME,
+            ctx.currentTime,
+            0.05,
+          );
+          sfxGain.gain.setTargetAtTime(
+            muted ? 0 : SFX_VOLUME,
+            ctx.currentTime,
+            0.05,
+          );
+        }
+      });
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden && window.speechSynthesis) speechSynthesis.cancel();
+        if (!ctx) return;
+        if (document.hidden) ctx.suspend();
+        else ctx.resume();
+      });
+
+      /* one sound: freq, delay, length, wave, volume, optional glide-to freq */
+      function blip(freq, delay, dur, type, vol, glideTo) {
+        if (!ctx || muted) return;
+        var t = ctx.currentTime + (delay || 0);
+        var o = ctx.createOscillator(),
+          g = ctx.createGain();
+        o.type = type || "sine";
+        o.frequency.setValueAtTime(freq, t);
+        if (glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(vol || 1, t + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g);
+        g.connect(sfxGain);
+        o.start(t);
+        o.stop(t + dur + 0.05);
+      }
+      /* right: a magic chime that sparkles upward */
+      function jingleRight() {
+        [784, 988, 1175, 1568].forEach(function (f, i) {
+          blip(f, i * 0.08, 0.28, "triangle", 1);
+        });
+        blip(2349, 0.34, 0.5, "sine", 0.3);
+        blip(1568, 0.34, 0.5, "triangle", 0.6);
+      }
+      /* wrong: a sad ghost "boo-hoo" that slides down */
+      function jingleWrong() {
+        blip(440, 0, 0.45, "triangle", 0.9, 180);
+        blip(330, 0.4, 0.6, "triangle", 0.9, 110);
+        blip(70, 0.4, 0.5, "sine", 0.7, 50);
+      }
+      function jingleWin() {
+        [523, 659, 784, 1047, 784, 1047, 1319].forEach(function (f, i) {
+          blip(f, i * 0.14, 0.3, "triangle", 1);
+        });
+      }
+
+      /* ===== voice (the device's built-in speech) ===== */
+      var voice = null;
+      function pickVoice() {
+        if (!window.speechSynthesis) return;
+        var vs = speechSynthesis.getVoices(),
+          pick = null;
+        for (var i = 0; i < vs.length; i++) {
+          if (vs[i].lang && vs[i].lang.replace("_", "-") === "en-US") {
+            pick = vs[i];
+            break;
+          }
+          if (
+            !pick &&
+            vs[i].lang &&
+            vs[i].lang.toLowerCase().indexOf("en") === 0
+          )
+            pick = vs[i];
+        }
+        voice = pick;
+      }
+      if (window.speechSynthesis) {
+        pickVoice();
+        speechSynthesis.onvoiceschanged = pickVoice;
+      }
+      function speak(word, delay) {
+        if (!window.speechSynthesis) return;
+        var go = function () {
+          if (current !== "game") return;
+          try {
+            speechSynthesis.cancel();
+            var u = new SpeechSynthesisUtterance(word);
+            u.lang = "en-US";
+            if (voice) u.voice = voice;
+            u.rate = VOICE_RATE;
+            u.pitch = 1.05;
+            u.volume = 1;
+            speechSynthesis.speak(u);
+          } catch (e) {}
+        };
+        if (delay) setTimeout(go, delay);
+        else go();
+      }
+
+      /* ===== screens ===== */
+      var $ = function (id) {
+        return document.getElementById(id);
+      };
+      var screens = { mode: "modeScreen", game: "game", result: "result" };
+      var current = "mode";
+      function show(name) {
+        current = name;
+        for (var k in screens)
+          $(screens[k]).classList.toggle("active", k === name);
+        if (name !== "game" && window.speechSynthesis) speechSynthesis.cancel();
+        if (name !== "result") clearConfetti();
+      }
+      $("back").addEventListener("click", function () {
+        if (current === "mode") location.href = "index.html";
+        else show("mode");
+      });
+      $("btnEasy").addEventListener("click", function () {
+        startGame("easy");
+      });
+      $("btnHard").addEventListener("click", function () {
+        startGame("hard");
+      });
+      $("btnAgain").addEventListener("click", function () {
+        startGame(mode);
+      });
+      $("btnModes").addEventListener("click", function () {
+        show("mode");
+      });
+      $("say").addEventListener("click", function () {
+        if (target) speak(target[0], 0);
+        var b = $("say");
+        b.classList.remove("talk");
+        void b.offsetWidth;
+        b.classList.add("talk");
+      });
+
+      /* ===== game ===== */
+      var mode = "easy",
+        order = [],
+        idx = 0,
+        score = 0,
+        missed = [],
+        target = null,
+        lock = false,
+        triedWrong = false;
+
+      function shuffle(a) {
+        for (var i = a.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = a[i];
+          a[i] = a[j];
+          a[j] = t;
+        }
+        return a;
+      }
+
+      function startGame(m) {
+        mode = m;
+        order = shuffle(ITEMS.slice()); // all 18 words, every game
+        idx = 0;
+        score = 0;
+        missed = [];
+        show("game");
+        showQuestion(true);
+      }
+
+      function showQuestion(first) {
+        target = order[idx];
+        lock = false;
+        triedWrong = false;
+        var n = mode === "easy" ? 2 : 4;
+        var others = shuffle(
+          ITEMS.filter(function (it) {
+            return it !== target;
+          }),
+        ).slice(0, n - 1);
+        var opts = shuffle([target].concat(others));
+
+        $("hudWord").textContent = "Word " + (idx + 1) + "/" + order.length;
+        $("hudScore").textContent = "⭐ " + score;
+        $("wordText").textContent = target[0];
+
+        var box = $("opts");
+        box.className = mode;
+        box.innerHTML = "";
+        opts.forEach(function (it, i) {
+          var b = document.createElement("button");
+          b.className = "opt";
+          b.style.animationDelay = i * 0.06 + "s";
+          b.setAttribute("aria-label", "picture");
+          var im = document.createElement("img");
+          im.alt = "";
+          im.onerror = function () {
+            b.textContent = it[0];
+          }; // if an image is missing, show its word
+          im.src = IMG_FOLDER + it[1];
+          b.appendChild(im);
+          b.addEventListener("click", function () {
+            choose(it, b);
+          });
+          box.appendChild(b);
+        });
+        /* the first word is spoken straight away (it follows a tap, which phones need) */
+        speak(target[0], first ? 0 : 300);
+        var s = $("say");
+        s.classList.remove("talk");
+        void s.offsetWidth;
+        s.classList.add("talk");
+      }
+
+      function choose(it, btn) {
+        if (lock || btn.classList.contains("wrong")) return;
+        if (it === target) {
+          lock = true;
+          btn.classList.add("right");
+          if (!triedWrong) score++;
+          $("hudScore").textContent = "⭐ " + score;
+          jingleRight();
+          setTimeout(function () {
+            idx++;
+            if (idx >= order.length) finish();
+            else showQuestion(false);
+          }, NEXT_DELAY);
+        } else {
+          btn.classList.add("wrong");
+          if (!triedWrong) {
+            triedWrong = true;
+            missed.push(target);
+          }
+          jingleWrong();
+          speak(target[0], 900); // say the word again so they can try once more
+        }
+      }
+
+      /* ===== results ===== */
+      function finish() {
+        var total = order.length,
+          pct = score / total;
+        $("resScore").textContent = score + "/" + total;
+        $("resTitle").textContent =
+          pct === 1 ? "Perfect!" : pct >= 0.6 ? "Great job!" : "Good try!";
+        var stars = pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : 1,
+          s = "";
+        for (var i = 0; i < 3; i++) s += i < stars ? "⭐" : "☆";
+        $("resStars").textContent = s;
+
+        var list = $("missList");
+        list.innerHTML = "";
+        if (missed.length) {
+          $("missTitle").textContent = "Words to practise:";
+          $("perfect").style.display = "none";
+          missed.forEach(function (w) {
+            var c = document.createElement("div");
+            c.className = "missCard";
+            var im = document.createElement("img");
+            im.alt = "";
+            im.src = IMG_FOLDER + w[1];
+            im.onerror = function () {
+              im.style.visibility = "hidden";
+            };
+            var t = document.createElement("div");
+            t.className = "w";
+            t.textContent = w[0];
+            c.appendChild(im);
+            c.appendChild(t);
+            list.appendChild(c);
+          });
+        } else {
+          $("missTitle").textContent = "";
+          $("perfect").style.display = "block";
+        }
+        show("result");
+        $("result").scrollTop = 0;
+        jingleWin();
+        confetti();
+      }
+      function confetti() {
+        var box = $("result"),
+          em = ["🎃", "👻", "🦇", "⭐", "🍬", "🕷️"];
+        for (var i = 0; i < 24; i++) {
+          var s = document.createElement("div");
+          s.className = "fall";
+          s.textContent = em[i % em.length];
+          s.style.left = Math.random() * 100 + "%";
+          s.style.animationDuration = 3 + Math.random() * 3 + "s";
+          s.style.animationDelay = Math.random() * 2 + "s";
+          box.appendChild(s);
+        }
+      }
+      function clearConfetti() {
+        Array.prototype.forEach.call(
+          document.querySelectorAll(".fall"),
+          function (n) {
+            n.remove();
+          },
+        );
+      }
+
+      /* preload images quietly */
+      ITEMS.forEach(function (it) {
+        var im = new Image();
+        im.src = IMG_FOLDER + it[1];
+      });
+    </script>
+  </body>
+</html>

@@ -395,6 +395,13 @@
           height: 30vh;
         }
       }
+      .credit {
+        font-size: clamp(12px, 2.4vmin, 20px);
+        color: var(--yellow);
+        opacity: 0.85;
+        letter-spacing: 0.04em;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -427,6 +434,7 @@
           ><img src="images/pumpkin.png" alt="" /><span>Word up</span></a
         >
       </nav>
+      <div class="credit">Created by Graeme Cattermole</div>
     </main>
 
     <div id="loader">
@@ -437,6 +445,7 @@
       <h2>Loading...</h2>
       <div class="bar"><i id="barFill"></i></div>
       <button id="startBtn">Tap to Start!</button>
+      <div class="credit">Created by Graeme Cattermole</div>
     </div>
 
     <script>
@@ -664,12 +673,12 @@
       /* ===== loading screen ===== */
       var imgs = [
         "images/sami1.png",
-        "images/kevin1.png",
-        "ghost.png",
-        "pumpkin.png",
-        "monster.png",
-        "black-cat.png",
-        "icon.png",
+        "images/kevin2.png",
+        "images/ghost.png",
+        "images/pumpkin.png",
+        "images/monster.png",
+        "images/black-cat.png",
+        "images/icon.png",
       ];
       var loaded = 0,
         t0 = Date.now();
