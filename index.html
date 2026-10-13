@@ -402,6 +402,53 @@
         letter-spacing: 0.04em;
         text-align: center;
       }
+      /* ---------- 5 buttons ---------- */
+      .card:nth-child(5) img {
+        animation-delay: -2.8s;
+      }
+
+      /* portrait: 2 + 2 + 1 (the last button sits in the middle) */
+      .menu {
+        width: min(92vw, 640px, calc((100vh - 210px) / 1.5));
+      }
+      .card:nth-child(5) {
+        grid-column: 1 / -1;
+        justify-self: center;
+        width: calc(50% - clamp(5px, 1.3vmin, 13px));
+      }
+
+      /* five colours that work together */
+      .c-study {
+        background: linear-gradient(160deg, #a66bff, #6a35c9);
+      }
+      .c-match {
+        background: linear-gradient(160deg, #ffb23f, #f0720a);
+      }
+      .c-type {
+        background: linear-gradient(160deg, #6fdc6f, #2a9d43);
+      }
+      .c-word {
+        background: linear-gradient(160deg, #4fc3f7, #1e7fc4);
+      }
+      .c-sheet {
+        background: linear-gradient(160deg, #ff7eb6, #d63a85);
+      }
+
+      /* landscape: all 5 in one row */
+      @media (orientation: landscape) {
+        .menu {
+          grid-template-columns: repeat(5, 1fr);
+          width: min(96vw, 1200px);
+        }
+        .card:nth-child(5) {
+          grid-column: auto;
+          justify-self: stretch;
+          width: auto;
+        }
+        .card span {
+          font-size: clamp(15px, 4.4vh, 28px);
+        }
+      }
     </style>
   </head>
   <body>
@@ -432,6 +479,9 @@
         >
         <a class="card c-word" href="wordup.html"
           ><img src="images/pumpkin.png" alt="" /><span>Word up</span></a
+        >
+        <a class="card c-sheet" href="worksheets.html"
+          ><img src="images/vampire.png" alt="" /><span>Worksheets</span></a
         >
       </nav>
       <div class="credit">Created by Graeme Cattermole</div>
@@ -675,9 +725,10 @@
         "images/sami1.png",
         "images/kevin2.png",
         "images/ghost.png",
-        "images/pumpkin.png",
-        "images/monster.png",
         "images/black-cat.png",
+        "images/monster.png",
+        "images/pumpkin.png",
+        "images/vampire.png",
         "images/icon.png",
       ];
       var loaded = 0,
