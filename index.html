@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Halloween Fun</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#2a1250" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Halloween" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="images/icon.png" />
+    <link rel="icon" type="image/png" href="images/icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg1: #2a1250;
+        --bg2: #4a1c78;
+        --bg3: #7a2f8f;
+        --orange: #ff9a1f;
+        --yellow: #ffe066;
+        --white: #fff8ee;
+        --font:
+          "Fredoka", "Chalkboard SE", "Hiragino Maru Gothic ProN",
+          "Comic Sans MS", system-ui, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg1);
+        font-family: var(--font);
+        color: var(--white);
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+      }
+      body {
+        background: radial-gradient(
+          circle at 50% 0%,
+          var(--bg3) 0%,
+          var(--bg2) 40%,
+          var(--bg1) 100%
+        );
+      }
+
+      /* ---------- decorations ---------- */
+      .moon {
+        position: fixed;
+        top: calc(env(safe-area-inset-top, 0px) + 4vmin);
+        left: 5vmin;
+        width: 14vmin;
+        height: 14vmin;
+        max-width: 110px;
+        max-height: 110px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fffbe0, #ffe58a 70%);
+        box-shadow: 0 0 40px 12px rgba(255, 229, 138, 0.35);
+        opacity: 0.9;
+        z-index: 0;
+      }
+      .star {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #fff;
+        opacity: 0.7;
+        animation: twinkle 3s infinite ease-in-out;
+        z-index: 0;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.2;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.3);
+        }
+      }
+      .bat {
+        position: fixed;
+        font-size: clamp(20px, 4vmin, 38px);
+        z-index: 0;
+        opacity: 0.8;
+        animation: fly 14s linear infinite;
+        pointer-events: none;
+      }
+      @keyframes fly {
+        0% {
+          transform: translate(-10vw, 0) rotate(-5deg);
+        }
+        25% {
+          transform: translate(25vw, -4vh) rotate(5deg);
+        }
+        50% {
+          transform: translate(55vw, 3vh) rotate(-5deg);
+        }
+        75% {
+          transform: translate(85vw, -3vh) rotate(5deg);
+        }
+        100% {
+          transform: translate(115vw, 2vh) rotate(-5deg);
+        }
+      }
+
+      /* ---------- main screen ---------- */
+      #app {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: calc(env(safe-area-inset-top, 0px) + 12px)
+          calc(env(safe-area-inset-right, 0px) + 14px)
+          calc(env(safe-area-inset-bottom, 0px) + 12px)
+          calc(env(safe-area-inset-left, 0px) + 14px);
+        gap: 3vmin;
+      }
+      header {
+        text-align: center;
+      }
+      h1 {
+        font-size: clamp(30px, 8vmin, 72px);
+        line-height: 1.05;
+        color: var(--orange);
+        font-weight: 700;
+        text-shadow:
+          0 3px 0 #7a2f00,
+          0 0 24px rgba(255, 154, 31, 0.5);
+      }
+      .sub {
+        font-size: clamp(16px, 3.4vmin, 30px);
+        color: var(--yellow);
+        font-weight: 500;
+        margin-top: 0.4vmin;
+        letter-spacing: 0.05em;
+      }
+
+      .menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(10px, 2.6vmin, 26px);
+        width: min(92vw, 640px);
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1vmin;
+        text-decoration: none;
+        color: #fff;
+        border-radius: clamp(18px, 4vmin, 34px);
+        padding: clamp(8px, 2vmin, 20px);
+        aspect-ratio: 1/1;
+        border: 4px solid rgba(255, 255, 255, 0.85);
+        box-shadow:
+          0 8px 0 rgba(0, 0, 0, 0.35),
+          0 14px 26px rgba(0, 0, 0, 0.35);
+        transition:
+          transform 0.12s,
+          box-shadow 0.12s;
+        position: relative;
+        overflow: hidden;
+      }
+      .card:active {
+        transform: translateY(6px);
+        box-shadow:
+          0 2px 0 rgba(0, 0, 0, 0.35),
+          0 6px 12px rgba(0, 0, 0, 0.35);
+      }
+      .card img {
+        width: 58%;
+        height: auto;
+        max-height: 62%;
+        object-fit: contain;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+        animation: bob 3s ease-in-out infinite;
+      }
+      .card:nth-child(2) img {
+        animation-delay: -0.7s;
+      }
+      .card:nth-child(3) img {
+        animation-delay: -1.4s;
+      }
+      .card:nth-child(4) img {
+        animation-delay: -2.1s;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      .card span {
+        font-size: clamp(18px, 4.2vmin, 34px);
+        font-weight: 700;
+        text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+        text-align: center;
+        line-height: 1.1;
+      }
+      .c-study {
+        background: linear-gradient(160deg, #a66bff, #6a35c9);
+      }
+      .c-match {
+        background: linear-gradient(160deg, #ffb23f, #f0720a);
+      }
+      .c-type {
+        background: linear-gradient(160deg, #6fdc6f, #2a9d43);
+      }
+      .c-word {
+        background: linear-gradient(160deg, #5a4a7a, #2c2145);
+      }
+
+      /* landscape: 4 across */
+      @media (orientation: landscape) {
+        #app {
+          gap: 2vmin;
+        }
+        .menu {
+          grid-template-columns: repeat(4, 1fr);
+          width: min(94vw, 1100px);
+        }
+        .card {
+          aspect-ratio: auto;
+          height: min(46vh, 300px);
+        }
+        .card img {
+          max-height: 60%;
+          width: auto;
+          max-width: 75%;
+        }
+        h1 {
+          font-size: clamp(26px, 9vh, 64px);
+        }
+        .sub {
+          font-size: clamp(14px, 4vh, 28px);
+        }
+        .card span {
+          font-size: clamp(16px, 5vh, 32px);
+        }
+      }
+      /* tablets in portrait: bigger */
+      @media (orientation: portrait) and (min-width: 700px) {
+        .menu {
+          width: min(86vw, 760px);
+        }
+      }
+
+      /* ---------- mute button ---------- */
+      #mute {
+        position: fixed;
+        z-index: 30;
+        top: calc(env(safe-area-inset-top, 0px) + 10px);
+        right: calc(env(safe-area-inset-right, 0px) + 12px);
+        width: clamp(46px, 8vmin, 66px);
+        height: clamp(46px, 8vmin, 66px);
+        border-radius: 50%;
+        border: 3px solid #fff;
+        background: var(--orange);
+        font-size: clamp(22px, 4.2vmin, 34px);
+        cursor: pointer;
+        color: #fff;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #mute:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+      }
+      #mute.off {
+        background: #6b5a85;
+      }
+
+      /* ---------- loading screen ---------- */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5vmin;
+        background: radial-gradient(
+          circle at 50% 20%,
+          var(--bg3),
+          var(--bg2) 45%,
+          var(--bg1)
+        );
+        transition: opacity 0.6s;
+        padding: 20px;
+        text-align: center;
+      }
+      #loader.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .chars {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 4vmin;
+      }
+      .chars img {
+        height: clamp(120px, 32vmin, 300px);
+        width: auto;
+        max-width: 42vw;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
+        animation: bob 2.2s ease-in-out infinite;
+      }
+      .chars img + img {
+        animation-delay: -1.1s;
+      }
+      #loader h2 {
+        font-size: clamp(26px, 6vmin, 52px);
+        color: var(--orange);
+        text-shadow: 0 3px 0 #7a2f00;
+      }
+      .bar {
+        width: min(70vw, 420px);
+        height: clamp(14px, 2.6vmin, 22px);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 3px solid #fff;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--yellow), var(--orange));
+        transition: width 0.3s;
+      }
+      #startBtn {
+        display: none;
+        font-family: var(--font);
+        font-weight: 700;
+        font-size: clamp(22px, 5vmin, 40px);
+        padding: 0.45em 1.5em;
+        border-radius: 60px;
+        border: 4px solid #fff;
+        color: #fff;
+        cursor: pointer;
+        background: linear-gradient(160deg, #ffb23f, #f0720a);
+        box-shadow: 0 7px 0 rgba(0, 0, 0, 0.35);
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      #startBtn:active {
+        transform: translateY(5px);
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.07);
+        }
+      }
+      @media (orientation: landscape) and (max-height: 500px) {
+        #loader {
+          gap: 1.5vh;
+        }
+        .chars img {
+          height: 30vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="moon"></div>
+    <div id="sky"></div>
+    <div class="bat" style="top: 18%; animation-delay: 0s">🦇</div>
+    <div class="bat" style="top: 55%; animation-delay: -6s">🦇</div>
+    <div class="bat" style="top: 80%; animation-delay: -10s; opacity: 0.6">
+      🦇
+    </div>
+
+    <button id="mute" aria-label="Mute music" title="Music on/off">🔊</button>
+
+    <main id="app">
+      <header>
+        <h1>Happy Halloween!</h1>
+        <div class="sub">Games &amp; Study</div>
+      </header>
+      <nav class="menu">
+        <a class="card c-study" href="study.html"
+          ><img src="images/ghost.png" alt="" /><span>Study</span></a
+        >
+        <a class="card c-match" href="matchup.html"
+          ><img src="images/black-cat.png" alt="" /><span>Match up</span></a
+        >
+        <a class="card c-type" href="typeup.html"
+          ><img src="images/monster.png" alt="" /><span>Type up</span></a
+        >
+        <a class="card c-word" href="wordup.html"
+          ><img src="images/pumpkin.png" alt="" /><span>Word up</span></a
+        >
+      </nav>
+    </main>
+
+    <div id="loader">
+      <div class="chars">
+        <img src="images/sami1.png" alt="Sami" />
+        <img src="images/kevin2.png" alt="Kevin" />
+      </div>
+      <h2>Loading...</h2>
+      <div class="bar"><i id="barFill"></i></div>
+      <button id="startBtn">Tap to Start!</button>
+    </div>
+
+    <script>
+      /* ===== settings ===== */
+      var MUSIC_VOLUME = 0.1; // background level (0 to 1). Lower = quieter
+      var TEMPO_BPM = 126;
+      var MIN_LOAD_MS = 1500; // shortest time the loading screen shows
+
+      /* ===== stars ===== */
+      (function () {
+        var sky = document.getElementById("sky");
+        for (var i = 0; i < 28; i++) {
+          var s = document.createElement("div");
+          s.className = "star";
+          s.style.left = Math.random() * 100 + "vw";
+          s.style.top = Math.random() * 70 + "vh";
+          s.style.animationDelay = -Math.random() * 3 + "s";
+          sky.appendChild(s);
+        }
+      })();
+
+      /* ===== android manifest (home screen icon) ===== */
+      try {
+        var iconUrl = new URL("images/icon.png", location.href).href;
+        var manifest = {
+          name: "Halloween Fun",
+          short_name: "Halloween",
+          start_url: location.href,
+          display: "standalone",
+          background_color: "#2a1250",
+          theme_color: "#2a1250",
+          icons: [{ src: iconUrl, sizes: "512x512", type: "image/png" }],
+        };
+        var link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = URL.createObjectURL(
+          new Blob([JSON.stringify(manifest)], { type: "application/json" }),
+        );
+        document.head.appendChild(link);
+      } catch (e) {}
+
+      /* ===== mute state ===== */
+      var muted = false;
+      try {
+        muted = localStorage.getItem("halloweenMuted") === "1";
+      } catch (e) {}
+      var muteBtn = document.getElementById("mute");
+      function showMute() {
+        muteBtn.textContent = muted ? "🔇" : "🔊";
+        muteBtn.classList.toggle("off", muted);
+        muteBtn.setAttribute(
+          "aria-label",
+          muted ? "Unmute music" : "Mute music",
+        );
+      }
+      showMute();
+
+      /* ===== background music (made with Web Audio, no file needed) ===== */
+      var ctx = null,
+        master = null,
+        timer = null,
+        started = false;
+      var events = [],
+        evIndex = 0,
+        loopStart = 0;
+      var beat = 60 / TEMPO_BPM;
+      var LOOP_BEATS = 24;
+
+      function hz(m) {
+        return 440 * Math.pow(2, (m - 69) / 12);
+      }
+
+      (function buildSong() {
+        // A minor waltz, 8 bars of 3 beats
+        var roots = [45, 50, 52, 45, 45, 53, 52, 52];
+        var chords = [
+          [57, 60, 64],
+          [57, 62, 65],
+          [56, 59, 64],
+          [57, 60, 64],
+          [57, 60, 64],
+          [57, 60, 65],
+          [56, 59, 64],
+          [56, 59, 64],
+        ];
+        var melody = [
+          [69, 1],
+          [72, 1],
+          [76, 1],
+          [74, 2],
+          [72, 1],
+          [71, 1],
+          [72, 1],
+          [71, 1],
+          [69, 3],
+          [69, 1],
+          [72, 1],
+          [76, 1],
+          [81, 2],
+          [79, 1],
+          [77, 1],
+          [76, 1],
+          [74, 1],
+          [76, 3],
+        ];
+        for (var b = 0; b < 8; b++) {
+          events.push({ t: b * 3, m: [roots[b]], d: 1.6, v: 0.55, w: "sine" });
+          events.push({
+            t: b * 3 + 1,
+            m: chords[b],
+            d: 0.8,
+            v: 0.22,
+            w: "triangle",
+          });
+          events.push({
+            t: b * 3 + 2,
+            m: chords[b],
+            d: 0.8,
+            v: 0.22,
+            w: "triangle",
+          });
+        }
+        var t = 0;
+        melody.forEach(function (n) {
+          events.push({
+            t: t,
+            m: [n[0]],
+            d: ((n[1] * beat) / beat) * 0.95,
+            v: 0.5,
+            w: "triangle",
+            bell: true,
+          });
+          t += n[1];
+        });
+        events.sort(function (a, b) {
+          return a.t - b.t;
+        });
+      })();
+
+      function playNote(freq, when, durBeats, vol, wave, bell) {
+        var dur = durBeats * beat;
+        var o = ctx.createOscillator(),
+          g = ctx.createGain();
+        o.type = wave;
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0.0001, when);
+        g.gain.linearRampToValueAtTime(vol, when + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, when + dur + 0.3);
+        o.connect(g);
+        g.connect(master);
+        o.start(when);
+        o.stop(when + dur + 0.4);
+        if (bell) {
+          var o2 = ctx.createOscillator(),
+            g2 = ctx.createGain();
+          o2.type = "sine";
+          o2.frequency.value = freq * 2;
+          g2.gain.setValueAtTime(0.0001, when);
+          g2.gain.linearRampToValueAtTime(vol * 0.25, when + 0.01);
+          g2.gain.exponentialRampToValueAtTime(0.0001, when + dur * 0.6 + 0.2);
+          o2.connect(g2);
+          g2.connect(master);
+          o2.start(when);
+          o2.stop(when + dur + 0.3);
+        }
+      }
+
+      function schedule() {
+        if (!ctx) return;
+        while (true) {
+          var e = events[evIndex];
+          var when = loopStart + e.t * beat;
+          if (when > ctx.currentTime + 0.5) break;
+          if (when >= ctx.currentTime - 0.05) {
+            for (var i = 0; i < e.m.length; i++)
+              playNote(hz(e.m[i]), when, e.d, e.v, e.w, e.bell);
+          }
+          evIndex++;
+          if (evIndex >= events.length) {
+            evIndex = 0;
+            loopStart += LOOP_BEATS * beat;
+          }
+        }
+      }
+
+      function startMusic() {
+        if (started) {
+          if (ctx && ctx.state === "suspended") ctx.resume();
+          return;
+        }
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        ctx = new AC();
+        master = ctx.createGain();
+        master.gain.value = muted ? 0 : MUSIC_VOLUME;
+        master.connect(ctx.destination);
+        loopStart = ctx.currentTime + 0.2;
+        evIndex = 0;
+        timer = setInterval(schedule, 100);
+        started = true;
+        if (ctx.state === "suspended") ctx.resume();
+      }
+
+      muteBtn.addEventListener("click", function () {
+        muted = !muted;
+        try {
+          localStorage.setItem("halloweenMuted", muted ? "1" : "0");
+        } catch (e) {}
+        showMute();
+        if (!muted && !started) startMusic();
+        if (master)
+          master.gain.setTargetAtTime(
+            muted ? 0 : MUSIC_VOLUME,
+            ctx.currentTime,
+            0.05,
+          );
+      });
+
+      document.addEventListener("visibilitychange", function () {
+        if (!ctx) return;
+        if (document.hidden) ctx.suspend();
+        else ctx.resume();
+      });
+
+      /* ===== loading screen ===== */
+      var imgs = [
+        "images/sami1.png",
+        "images/kevin1.png",
+        "ghost.png",
+        "pumpkin.png",
+        "monster.png",
+        "black-cat.png",
+        "icon.png",
+      ];
+      var loaded = 0,
+        t0 = Date.now();
+      var fill = document.getElementById("barFill");
+      var startBtn = document.getElementById("startBtn");
+      var loaderEl = document.getElementById("loader");
+
+      function oneDone() {
+        loaded++;
+        fill.style.width = Math.round((loaded / imgs.length) * 100) + "%";
+        if (loaded === imgs.length) {
+          var wait = Math.max(0, MIN_LOAD_MS - (Date.now() - t0));
+          setTimeout(function () {
+            document.querySelector("#loader h2").textContent = "Ready!";
+            startBtn.style.display = "block";
+          }, wait);
+        }
+      }
+      imgs.forEach(function (src) {
+        var im = new Image();
+        im.onload = oneDone;
+        im.onerror = oneDone; // keep going even if an image is missing
+        im.src = src;
+      });
+
+      startBtn.addEventListener("click", function () {
+        if (!muted) startMusic();
+        loaderEl.classList.add("hide");
+        setTimeout(function () {
+          loaderEl.style.display = "none";
+        }, 700);
+      });
+    </script>
+  </body>
+</html>
