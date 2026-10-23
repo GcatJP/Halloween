@@ -705,7 +705,7 @@
           localStorage.setItem("halloweenMuted", muted ? "1" : "0");
         } catch (e) {}
         showMute();
-        if (!muted && !started) startMusic();
+        if (!muted) startMusic();
         if (master)
           master.gain.setTargetAtTime(
             muted ? 0 : MUSIC_VOLUME,
@@ -713,11 +713,19 @@
             0.05,
           );
       });
-
+      function resumeAudio() {
+        if (ctx && ctx.state !== "running") {
+          var p = ctx.resume();
+          if (p && p.catch) p.catch(function () {});
+        }
+      }
+      ["touchend", "click"].forEach(function (ev) {
+        document.addEventListener(ev, resumeAudio, true);
+      });
       document.addEventListener("visibilitychange", function () {
         if (!ctx) return;
         if (document.hidden) ctx.suspend();
-        else ctx.resume();
+        else resumeAudio();
       });
 
       /* ===== loading screen ===== */
@@ -754,7 +762,12 @@
         im.onerror = oneDone; // keep going even if an image is missing
         im.src = src;
       });
-
+      setTimeout(function () {
+        if (loaded < imgs.length) {
+          loaded = imgs.length - 1;
+          oneDone();
+        }
+      }, 8000);
       startBtn.addEventListener("click", function () {
         if (!muted) startMusic();
         loaderEl.classList.add("hide");
