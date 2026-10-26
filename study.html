@@ -1373,24 +1373,20 @@
 
       /* ===== voice (the device's built-in speech) ===== */
       var voice = null,
-        speakTimer = null;
+        speakTimer = null,
+        lastUtter = null;
       function pickVoice() {
         if (!window.speechSynthesis) return;
         var vs = speechSynthesis.getVoices(),
           pick = null;
         for (var i = 0; i < vs.length; i++) {
-          if (vs[i].lang && vs[i].lang.replace("_", "-") === "en-US") {
+          var l = (vs[i].lang || "").replace("_", "-");
+          if (l === "en-US" && vs[i].localService) {
             pick = vs[i];
             break;
           }
-          if (
-            !pick &&
-            vs[i].lang &&
-            vs[i].lang.toLowerCase().indexOf("en") === 0
-          )
-            pick = vs[i];
         }
-        voice = pick;
+        voice = pick; // null = let the device choose by language
       }
       if (window.speechSynthesis) {
         pickVoice();
@@ -1401,20 +1397,29 @@
         clearTimeout(speakTimer);
         var go = function () {
           try {
-            speechSynthesis.cancel();
-            var u = new SpeechSynthesisUtterance(text);
-            u.lang = "en-US";
-            if (voice) u.voice = voice;
-            u.rate = VOICE_RATE;
-            u.pitch = 1.05;
-            u.volume = 1;
-            speechSynthesis.speak(u);
+            var busy = speechSynthesis.speaking || speechSynthesis.pending;
+            if (busy) speechSynthesis.cancel();
+            speakTimer = setTimeout(
+              function () {
+                try {
+                  speechSynthesis.resume();
+                  var u = new SpeechSynthesisUtterance(text);
+                  u.lang = "en-US";
+                  if (voice) u.voice = voice;
+                  u.rate = VOICE_RATE;
+                  u.pitch = 1.05;
+                  u.volume = 1;
+                  lastUtter = u;
+                  speechSynthesis.speak(u);
+                } catch (e) {}
+              },
+              busy ? 120 : 0,
+            );
           } catch (e) {}
         };
         if (delay) speakTimer = setTimeout(go, delay);
         else go();
       }
-
       /* ===== screens / navigation ===== */
       var screens = ["hub", "viewer", "drag", "quiz", "qresult", "final"];
       var current = "hub";
